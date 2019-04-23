@@ -1,0 +1,36 @@
+version: '3'
+services:
+
+  db:
+    image: mongo:4
+    restart: always
+    environment:
+      - TZ=Japan
+    networks:
+      - back
+    volumes:
+      - ./mongo/db:/data/db
+      - ./mongo/configdb:/data/configdb
+
+  app:
+    image: weseek/growi:3
+    build: .
+    restart: always
+    depends_on:
+      - db
+    environment:
+      - MONGO_URI=mongodb://db:27017/growi
+    env_file: .env
+    command: npm run server:prod
+    networks:
+      - front
+      - back
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - ./growi:/data
+
+networks:
+  front:
+  back:
+    internal: true
