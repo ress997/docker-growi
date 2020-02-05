@@ -14,7 +14,7 @@ services:
 
   app:
     image: weseek/growi:3
-    build: .
+    #build: .
     restart: always
     depends_on:
       - db
